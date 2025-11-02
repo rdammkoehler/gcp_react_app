@@ -1,0 +1,30 @@
+options:
+  logging: CLOUD_LOGGING_ONLY
+
+steps:
+- name: "gcr.io/cloud-builders/npm"
+  args: ['install']
+- name: "gcr.io/cloud-builders/npm"
+  args: ['run', 'build']
+- name: "gcr.io/cloud-builders/docker"
+  args: ['build', '-t', 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}', '.']
+- name: "gcr.io/google.com/cloudskdtool/cloud-sdk"
+  args:
+    - 'run'
+    - 'deploy'
+    - 'rustless-web-app'
+    - '--image'
+    - 'gcr.io/$PROJECT_ID/${_SERVICE_NAME}'
+    - '--region'
+    - 'us-central1'
+    - '--platform'
+    - 'managed'
+    - '--allow-unauthenticated'
+
+images:
+  - 'gcr.ip/$PROJECT_ID/${_SERVICE_NAME}'
+
+timeout: 800s
+
+substitutions:
+  _SERVICE_NAME: gcp-react-app
