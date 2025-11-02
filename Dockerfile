@@ -1,5 +1,5 @@
 # Stage 1: Build the React app
-FROM node:20 as vite-build
+FROM node:latest as vite-build
 WORKDIR /app
 COPY package*.json ./
 RUN yarn
